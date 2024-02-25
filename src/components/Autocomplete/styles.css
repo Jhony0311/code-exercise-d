@@ -6,3 +6,17 @@
 .autocomplete-label {
   margin-right: 8px;
 }
+
+.autocomplete-error {
+  margin-top: 8px;
+}
+
+.autcomplete-board {
+  margin-top: 8px;
+  padding: 2em;
+  border: 1px solid lightgray;
+}
+
+.autocomplete-result {
+  margin-bottom: 1em;
+}

@@ -1,5 +1,7 @@
 import { useState } from "react";
 
+import { api } from "../../services/api";
+
 import "./styles.css";
 
 type AutocompleteProps = {
@@ -8,13 +10,28 @@ type AutocompleteProps = {
 
 export function Autocomplete({ label, id, name }: AutocompleteProps) {
   const [state, setState] = useState("");
+  const [err, setErr] = useState<string | null>(null);
+  const [results, setResult] = useState([""]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setState(value);
 
     if (value.length > 2) {
-      // search via promise
+      setErr(null);
+      try {
+        const res = await api.get<{results: Array<string>}>(`/search?name=${value}`);
+        setResult(res.results);
+      } catch (err) {
+        if (err instanceof Error) {
+          setErr(err.message);
+          return;
+        }
+
+        setErr("There was an error on our side, try again");
+      }
+    } else {
+      setResult([]);
     }
   };
 
@@ -31,6 +48,21 @@ export function Autocomplete({ label, id, name }: AutocompleteProps) {
         value={state}
         onChange={handleChange}
       />
+
+      {err && (
+        <div className="autocomplete-error">
+          <small>{err}</small>
+        </div>
+      )}
+      {err === null && (
+        <div className="autocomplete-result-board">
+          {results.map((r) => (
+            <p key={r} className="autocomplete-result">
+              {r}
+            </p>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
