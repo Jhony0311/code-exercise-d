@@ -20,6 +20,7 @@ export function Autocomplete({ label, id, name }: AutocompleteProps) {
     if (value.length > 2) {
       setErr(null);
       try {
+        // request could be abstracted as promise to be executed but coming from props
         const res = await api.get<{ results: Array<string> }>(
           `/search?name=${value}`
         );
