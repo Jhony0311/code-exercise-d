@@ -29,7 +29,7 @@ const handlers = [
       );
     }
 
-    const search = users.filter((user) => user.name.includes(query));
+    const search = users.filter((user) => user.name.toLowerCase().includes(query)).map((user) => user.name);
 
     return HttpResponse.json(
       {
