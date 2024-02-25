@@ -20,7 +20,9 @@ export function Autocomplete({ label, id, name }: AutocompleteProps) {
     if (value.length > 2) {
       setErr(null);
       try {
-        const res = await api.get<{results: Array<string>}>(`/search?name=${value}`);
+        const res = await api.get<{ results: Array<string> }>(
+          `/search?name=${value}`
+        );
         setResult(res.results);
       } catch (err) {
         if (err instanceof Error) {
@@ -57,12 +59,38 @@ export function Autocomplete({ label, id, name }: AutocompleteProps) {
       {err === null && (
         <div className="autocomplete-result-board">
           {results.map((r) => (
-            <p key={r} className="autocomplete-result">
-              {r}
-            </p>
+            <ResultItem query={state}>{r}</ResultItem>
           ))}
         </div>
       )}
     </div>
   );
+}
+
+export type ResultItemProps = {
+  children: string;
+  query: string;
+};
+
+function ResultItem({ children, query }: ResultItemProps) {
+  const parts = splitStringBySubstring(children, query);
+
+  return (
+    <p className="autocomplete-result">
+      {parts.map((str) =>
+        str.toLowerCase() === query.toLowerCase() ? <strong>{str}</strong> : str
+      )}
+    </p>
+  );
+}
+
+function splitStringBySubstring(str: string, substring: string) {
+  // Escape special characters in the substring and create a regular expression with capturing groups
+  const regex = new RegExp(
+    `(${substring.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")})`,
+    "gi"
+  );
+
+  // Use the split method with the regular expression
+  return str.split(regex).filter((part) => part !== ""); // Filter out empty strings
 }
