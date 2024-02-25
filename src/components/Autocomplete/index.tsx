@@ -39,10 +39,11 @@ export function Autocomplete({ label, id, name }: AutocompleteProps) {
   };
 
   return (
-    <div>
+    <div className="autocomplete">
       <label className="autocomplete-label" htmlFor={id}>
         {label}
       </label>
+      <br />
       <input
         id={id}
         name={name}
@@ -57,7 +58,7 @@ export function Autocomplete({ label, id, name }: AutocompleteProps) {
           <small>{err}</small>
         </div>
       )}
-      {err === null && (
+      {err === null && Boolean(results.length) && (
         <div className="autocomplete-result-board">
           {results.map((r) => (
             <ResultItem query={state}>{r}</ResultItem>
