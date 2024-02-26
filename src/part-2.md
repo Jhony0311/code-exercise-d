@@ -1,5 +1,5 @@
 1. What is the difference between Component and PureComponent? Give an example where it might break my app.
-- They are similar, pure component instead of letting you diff to avoid rerenders will skip next renders if props and state are the same.
+- They are similar, pure component instead of letting you diff to avoid rerenders will skip next renders if props and state are the same. For example if your are trying to a component for complex values like object it might fail to diff props correctly.
 
 Using a pure component without considering it might break your app because a component will not update when you expect it to update.
 
